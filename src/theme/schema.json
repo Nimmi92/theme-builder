@@ -1,0 +1,84 @@
+{
+    "data" : {
+      "theme1" : {
+        "id": "T_001",
+        "name": "Theme Blue",
+        "specs": {
+          "body": "#FFFFFF",
+          "color": "#000000",
+          "fontFamily": "Montserrat",
+          "fontSize": "14px",
+          "padding": "12px 16px",
+          "cursor": "pointer",
+          "borderRadius": "0px",
+          "button": {
+            "enabled": {
+              "color": "#FFFFFF",
+              "background": "#058ED8",
+              "border": "none",
+              "opacity": "1"
+            },
+            "hover": {
+              "color": "#FFFFFF",
+              "background": "#093554",
+              "border": "none",
+              "opacity": "1"
+            },
+            "focus": {
+              "color": "#FFFFFF",
+              "background": "#093554",
+              "border": "none",
+              "opacity": "1"
+            },
+            "disabled": {
+              "color": "#FFFFFF",
+              "background": "#058ED8",
+              "border": "none",
+              "opacity": "0.3",
+              "cursor": "default"
+            }
+          }
+        }
+      },
+      "theme2" : {
+        "id": "T_002",
+        "name": "Theme Orange",
+        "specs": {
+          "body": "#FFFFFF",
+          "color": "#000000",
+          "fontFamily": "Pacifico",
+          "fontSize": "14px",
+          "padding": "8px 16px",
+          "cursor": "pointer",
+          "border-radius": "5px",
+          "button": {
+            "enabled": {
+              "color": "#F7AB1B",
+              "background": "#FFFFFF",
+              "border": "1px solid #F7AB1B",
+              "opacity": "normal"
+            },
+            "hover": {
+              "color": "#FFFFFF",
+              "background": "#F7AB1B",
+              "border": "1px solid #F7AB1B",
+              "opacity": "normal"
+            },
+            "focus": {
+              "color": "#FFFFFF",
+              "background": "#F7AB1B",
+              "border": "1px solid #F7AB1B",
+              "opacity": "normal"
+            },
+            "disabled": {
+              "color": "#F7AB1B",
+              "background": "#FFFFFF",
+              "border": "1px solid #F7AB1B",
+              "opacity": "disabled",
+              "cursor": "default"
+            }
+          }
+        }
+      }
+    }
+  }
