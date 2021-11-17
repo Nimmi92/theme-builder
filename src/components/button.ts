@@ -18,8 +18,10 @@ const Button = styled.button<ButtonProps>`
     };
     border-radius: ${(props) => props.theme.specs.borderRadius }; 
     padding: ${(props) => props.theme.specs.padding }; 
+    font-family: ${(props) => props.theme.specs.fontFamily };
     font-size: ${(props) => props.theme.specs.fontSize };
     cursor: ${(props) => {
+            if(props.readonly) return 'none';
             if(props.status === 'disabled') return props.theme.specs.button.disabled.cursor;
             return props.theme.specs.cursor;
         }

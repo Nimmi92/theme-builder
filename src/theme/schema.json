@@ -37,6 +37,11 @@
               "opacity": "0.3",
               "cursor": "default"
             }
+          },
+          "customisation": {
+            "color": true,
+            "background": true,
+            "hoverBackground": true
           }
         }
       },
@@ -50,33 +55,38 @@
           "fontSize": "14px",
           "padding": "8px 16px",
           "cursor": "pointer",
-          "border-radius": "5px",
+          "borderRadius": "5px",
           "button": {
             "enabled": {
               "color": "#F7AB1B",
               "background": "#FFFFFF",
               "border": "1px solid #F7AB1B",
-              "opacity": "normal"
+              "opacity": "1"
             },
             "hover": {
               "color": "#FFFFFF",
               "background": "#F7AB1B",
               "border": "1px solid #F7AB1B",
-              "opacity": "normal"
+              "opacity": "1"
             },
             "focus": {
               "color": "#FFFFFF",
               "background": "#F7AB1B",
               "border": "1px solid #F7AB1B",
-              "opacity": "normal"
+              "opacity": "1"
             },
             "disabled": {
               "color": "#F7AB1B",
               "background": "#FFFFFF",
               "border": "1px solid #F7AB1B",
-              "opacity": "disabled",
+              "opacity": "0.3",
               "cursor": "default"
             }
+          },
+          "customisation": {
+            "color": true,
+            "background": false,
+            "hoverBackground": false
           }
         }
       }

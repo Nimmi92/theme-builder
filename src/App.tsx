@@ -4,7 +4,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 import Home from './client/pages/Home/Home';
 import * as themes from './theme/schema.json';
-import { useTheme } from './theme/useTheme';
+import { useAppTheme } from './theme/useAppTheme';
 import { setToLS } from './utils/storage';
 
 // Global Style
@@ -26,9 +26,9 @@ const App: React.FC = () => {
 
   setToLS('all-themes', themes);
 
-  const { theme, themeLoaded } = useTheme();
+  const { theme, themeLoaded } = useAppTheme();
 	const [selectedTheme, setSelectedTheme] = useState(theme);
-  
+
 	useEffect(() => {
 	  setSelectedTheme(theme);
 	 }, [themeLoaded]);
@@ -39,7 +39,10 @@ const App: React.FC = () => {
         themeLoaded && 
         <ThemeProvider theme={ selectedTheme }>
           <Switch>
-            <Route exact path='/' component={Home} />
+            <Route exact path='/'
+              render={(props) => (
+                <Home {...props} setter={ setSelectedTheme } />
+            )}/>
           </Switch>
           <GlobalStyle/>
         </ThemeProvider>

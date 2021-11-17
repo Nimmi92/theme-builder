@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react';
 import { setToLS, getFromLS } from '../utils/storage';
 import _ from 'lodash';
 
-export const useTheme = () => {
+export const useAppTheme = () => {
   const themes = getFromLS('all-themes');
-
-  const [theme, setTheme] = useState(themes.data.theme1);
+  const defaultTheme = 'theme1';
+  const [theme, setTheme] = useState(themes.data[defaultTheme]);
   const [themeLoaded, setThemeLoaded] = useState(false);
 
   const setMode = (mode: any) => {
-    setToLS('theme', mode)
+    setToLS('theme', mode);
     setTheme(mode);
   };
 
   useEffect(() =>{
     const localTheme = getFromLS('theme');
-    localTheme ? setTheme(localTheme) : setTheme(themes.data.theme1);
+    localTheme ? setTheme(localTheme) : setTheme(themes.data[defaultTheme]);
     setThemeLoaded(true);
   }, []);
 

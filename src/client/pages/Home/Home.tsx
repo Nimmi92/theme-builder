@@ -3,6 +3,8 @@ import Button from '../../../components/button';
 import { RadioButton, RadioButtonLabel, Item } from '../../../components/radioButton';
 import { InputBox, InputBoxLabel, InputItem } from '../../../components/inputBox';
 import styled, { useTheme } from 'styled-components';
+import { useAppTheme } from '../../../theme/useAppTheme';
+import { getFromLS } from '../../../utils/storage';
 
 const Container = styled.div`
 	margin: 0 20px;
@@ -54,22 +56,30 @@ const ThemeOutput = styled.div`
 `;
 
 interface Props {
-
+	setter: Object
 }
 
 const Home: React.FC = (props: Props) => {
+
 	const theme = useTheme();
+	const themes = getFromLS('all-themes');
+	const { setMode } = useAppTheme();
 
 	// Default specifications
 	const defaultColor = theme.specs.button.enabled.color;
 	const defaultBgColor = theme.specs.button.enabled.background;
 	const defaultHoverBgColor = theme.specs.button.hover.background;
 
+	// State and specifications of the component
 	const [selectedState, setSelectedState] = useState("enabled");
 	const [selectedColor, setSelectedColor] = useState(defaultColor);
 	const [selectedBgColor, setSelectedBgColor] = useState(defaultBgColor);
 	const [selectedHoverBgColor, setSelectedHoverBgColor] = useState(defaultHoverBgColor);
 
+	// Theme change
+	const [switchedTheme, setSwitchedTheme] = useState('theme1');
+
+	// Button action
 	const handleBtnClick = (event: React.ChangeEvent<HTMLButtonElement>) => {
 		document.querySelector(`.${ThemeAction.styledComponentId}`).innerHTML +="<p>Clicked</p>"
 	}
@@ -94,142 +104,195 @@ const Home: React.FC = (props: Props) => {
 		setSelectedHoverBgColor(value);
 	};
 
+	// Reset specifications
 	const handleReset = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedColor(defaultColor);
 		setSelectedBgColor(defaultBgColor);
 		setSelectedHoverBgColor(defaultHoverBgColor);
-		resetInputBox(document.querySelectorAll('input[type="text"]'))
+		resetInputBox(document.querySelectorAll('input[type="text"]'));
 	};
 
 	const resetInputBox = (elements: NodeListOf<Element>) => {
-		for(let i in elements) {
+		for (let i = 0; i < elements.length; i++) {
 			elements[i].value = "";
 		}
 	};
 
+	// Theme change
+	const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const value = event.target.value;
+		themeSwitcher(value);
+		resetInputBox(document.querySelectorAll('input[type="text"]'));
+	}
+
+	const themeSwitcher = (themeName: any) => {
+		const newTheme = themes.data[themeName];
+		setSwitchedTheme(themeName);
+        setMode(newTheme);
+        props.setter(newTheme);
+		setSelectedColor("");
+		setSelectedBgColor("");
+		setSelectedHoverBgColor("");
+    };
+
 	return (
 	<Container>
-		<div className="about">
+		<div>
 			<h1>Theme builder</h1>
+			<p> Select a theme to see how the components would be displayed when it is applied</p>
+			<Item>
+				<RadioButton 
+				type="radio" 
+				name="themetype"
+				value="theme1"
+				checked={switchedTheme === "theme1"}
+				onChange={event => handleThemeChange(event)}
+				/>
+				<RadioButtonLabel />
+				<div>Theme 1 (Blue Theme)</div>
+			</Item>
+			<Item>
+				<RadioButton 
+				type="radio" 
+				name="themetype"
+				value="theme2"
+				checked={switchedTheme === "theme2"}
+				onChange={event => handleThemeChange(event)}
+				/>
+				<RadioButtonLabel />
+				<div>Theme 2 (Orange Theme)</div>
+			</Item>		
 		</div>
 		<ThemeSection>
 			<ThemeState>
 				<ButtonContainer>
 					<h3>Enabled State</h3>
-					<Button label="OK" onClick={event => event.preventDefault } status="enabled">OK</Button>
+					<Button label="OK" onClick={event => event.preventDefault } status="enabled" readonly>OK</Button>
 				</ButtonContainer>
 				<ButtonContainer>
 					<h3>Hover State</h3>
-					<Button label="OK" onClick={event => event.preventDefault } status="hover">OK</Button>
+					<Button label="OK" onClick={event => event.preventDefault } status="hover" readonly>OK</Button>
 				</ButtonContainer>
 				<ButtonContainer>
 					<h3>Focus State</h3>
-					<Button label="OK" onClick={event => event.preventDefault } status="focus">OK</Button>
+					<Button label="OK" onClick={event => event.preventDefault } status="focus" readonly>OK</Button>
 				</ButtonContainer>
 				<ButtonContainer>
 					<h3>Disabled State</h3>
-					<Button label="OK" onClick={event => event.preventDefault } status="disabled">OK</Button>
+					<Button label="OK" onClick={event => event.preventDefault } status="disabled" readonly>OK</Button>
 				</ButtonContainer>
 			</ThemeState>
 			<ThemePlayground>
 				<h3>Playground</h3>
+				<p>Play with the state and customisation of the button to see how it would be displayed.</p>
 				<ThemeOutput>
 					<Button label="OK" onClick={event => handleBtnClick(event)} status={selectedState} color={selectedColor} bgColor={selectedBgColor} hoverBgColor={selectedHoverBgColor}>OK</Button>
 				</ThemeOutput>
-				<h4>Actions</h4>
 				<ThemeAction>
+					<h4>Actions</h4>
 				</ThemeAction>
 				<ThemeSelection>
-					<h4>States</h4>
-					<Item>
-						<RadioButton 
-						type="radio" 
-						name="radio"
-						value="enabled"
-						checked={selectedState === "enabled"}
-						onChange={event => handleStateSelectChange(event)}
-						/>
-						<RadioButtonLabel />
-						<div>enabled</div>
-					</Item>
-					<Item>
-						<RadioButton 
-						type="radio" 
-						name="radio"
-						value="hover"
-						checked={selectedState === "hover"}
-						onChange={event => handleStateSelectChange(event)}
-						/>
-						<RadioButtonLabel />
-						<div>hover</div>
-					</Item>
-					<Item>
-						<RadioButton 
-						type="radio" 
-						name="radio"
-						value="focus"
-						checked={selectedState === "focus"}
-						onChange={event => handleStateSelectChange(event)}
-						/>
-						<RadioButtonLabel />
-						<div>focus</div>
-					</Item>
-					<Item>
-						<RadioButton 
-						type="radio" 
-						name="radio"
-						value="disabled"
-						checked={selectedState === "disabled"}
-						onChange={event => handleStateSelectChange(event)}
-						/>
-						<RadioButtonLabel />
-						<div>disabled</div>
+					<div>
+						<h4>States</h4>
+						<Item>
+							<RadioButton 
+							type="radio" 
+							name="themeState"
+							value="enabled"
+							checked={selectedState === "enabled"}
+							onChange={event => handleStateSelectChange(event)}
+							/>
+							<RadioButtonLabel />
+							<div>enabled</div>
 						</Item>
+						<Item>
+							<RadioButton 
+							type="radio" 
+							name="themeState"
+							value="hover"
+							checked={selectedState === "hover"}
+							onChange={event => handleStateSelectChange(event)}
+							/>
+							<RadioButtonLabel />
+							<div>hover</div>
+						</Item>
+						<Item>
+							<RadioButton 
+							type="radio" 
+							name="themeState"
+							value="focus"
+							checked={selectedState === "focus"}
+							onChange={event => handleStateSelectChange(event)}
+							/>
+							<RadioButtonLabel />
+							<div>focus</div>
+						</Item>
+						<Item>
+							<RadioButton 
+							type="radio" 
+							name="themeState"
+							value="disabled"
+							checked={selectedState === "disabled"}
+							onChange={event => handleStateSelectChange(event)}
+							/>
+							<RadioButtonLabel />
+							<div>disabled</div>
+						</Item>
+					</div>
+					<div>
 						<h4>Customisations</h4>
-						<InputItem>
-							<InputBoxLabel>
-								<div>Color</div>
-							</InputBoxLabel>
-							<InputBox
-								type="text"
-								name="color"
-								placeholder="Please enter color in #hexcode"
-								onChange={event => handleColorChange(event)}
-							>
-							</InputBox>
-						</InputItem>
-						<InputItem>
-							<InputBoxLabel>
-								<div>Background Color</div>
-							</InputBoxLabel>
-							<InputBox
-								type="text"
-								name="color"
-								placeholder="Please enter background color in #hexcode"
-								onChange={event => handleBgColorChange(event)}
-							>
-							</InputBox>
-						</InputItem>
-						<InputItem>
-							<InputBoxLabel>
-								<div>Hover Background Color</div>
-							</InputBoxLabel>
-							<InputBox
-								type="text"
-								name="color"
-								placeholder="Please enter hover background color in #hexcode"
-								onChange={event => handleHoverBgColorChange(event)}
-							>
-							</InputBox>
-						</InputItem>
+						{
+							theme.specs.customisation.color &&
+							<InputItem>
+								<InputBoxLabel>
+									<div>Color</div>
+								</InputBoxLabel>
+								<InputBox
+									type="text"
+									name="color"
+									placeholder="Please enter color in #hexcode"
+									onChange={event => handleColorChange(event)}
+								>
+								</InputBox>
+							</InputItem>
+						}
+						{
+							theme.specs.customisation.background &&
+							<InputItem>
+								<InputBoxLabel>
+									<div>Background Color</div>
+								</InputBoxLabel>
+								<InputBox
+									type="text"
+									name="color"
+									placeholder="Please enter background color in #hexcode"
+									onChange={event => handleBgColorChange(event)}
+								>
+								</InputBox>
+							</InputItem>
+						}
+						{
+							theme.specs.customisation.hoverBackground &&
+							<InputItem>
+								<InputBoxLabel>
+									<div>Hover Background Color</div>
+								</InputBoxLabel>
+								<InputBox
+									type="text"
+									name="color"
+									placeholder="Please enter hover background color in #hexcode"
+									onChange={event => handleHoverBgColorChange(event)}
+								>
+								</InputBox>
+							</InputItem>
+						}
+					</div>
+					<Button label="Reset" status="enabled" onClick={event => handleReset(event)}>Reset</Button>
 				</ThemeSelection>
-				<Button label="Reset" status="enabled" onClick={event => handleReset(event)}>Reset</Button>
 			</ThemePlayground>
 		</ThemeSection>
-
 	</Container>
 	)
-
 }
 
 export default Home
